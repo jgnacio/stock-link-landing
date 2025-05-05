@@ -50,6 +50,16 @@ const config = {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
+      keyframes: {
+        'accordion-down': {
+          from: { height: '0' },
+          to: { height: 'var(--radix-accordion-content-height)' },
+        },
+        'accordion-up': {
+          from: { height: 'var(--radix-accordion-content-height)' },
+          to: { height: '0' },
+        },
+      },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
@@ -97,16 +107,6 @@ const config = {
         mono: ['var(--font-geist-mono)'],
         sans: ['var(--font-geist-sans)'],
       },
-      keyframes: {
-        'accordion-down': {
-          from: { height: '0' },
-          to: { height: 'var(--radix-accordion-content-height)' },
-        },
-        'accordion-up': {
-          from: { height: 'var(--radix-accordion-content-height)' },
-          to: { height: '0' },
-        },
-      },
       typography: () => ({
         DEFAULT: {
           css: [
@@ -116,6 +116,23 @@ const config = {
               h1: {
                 fontWeight: 'normal',
                 marginBottom: '0.25em',
+                fontSize: '2.5rem',
+                '@media (min-width: 768px)': {
+                  fontSize: '3.5rem',
+                },
+              },
+              h2: {
+                fontSize: '1.5rem',
+                fontWeight: 600,
+                '@media (min-width: 768px)': {
+                  fontSize: '1.875rem',
+                },
+              },
+              h3: {
+                fontSize: '1.25rem',
+                '@media (min-width: 768px)': {
+                  fontSize: '1.5rem',
+                },
               },
             },
           ],
@@ -125,10 +142,22 @@ const config = {
             {
               h1: {
                 fontSize: '2.5rem',
+                '@media (min-width: 768px)': {
+                  fontSize: '3.5rem',
+                },
               },
               h2: {
-                fontSize: '1.25rem',
+                fontSize: '1.5rem',
                 fontWeight: 600,
+                '@media (min-width: 768px)': {
+                  fontSize: '1.875rem',
+                },
+              },
+              h3: {
+                fontSize: '1.25rem',
+                '@media (min-width: 768px)': {
+                  fontSize: '1.5rem',
+                },
               },
             },
           ],
@@ -138,9 +167,21 @@ const config = {
             {
               h1: {
                 fontSize: '3.5rem',
+                '@media (min-width: 768px)': {
+                  fontSize: '4.5rem',
+                },
               },
               h2: {
+                fontSize: '1.875rem',
+                '@media (min-width: 768px)': {
+                  fontSize: '2.25rem',
+                },
+              },
+              h3: {
                 fontSize: '1.5rem',
+                '@media (min-width: 768px)': {
+                  fontSize: '1.875rem',
+                },
               },
             },
           ],

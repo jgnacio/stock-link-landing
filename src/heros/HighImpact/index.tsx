@@ -16,6 +16,7 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ links, media, richText 
   const { setHeaderTheme } = useHeaderTheme()
   const [isExpanded, setIsExpanded] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setHeaderTheme('dark')
@@ -39,15 +40,38 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ links, media, richText 
     }
   }, [setHeaderTheme])
 
+  useEffect(() => {
+    const handleParallax = () => {
+      if (videoRef.current && containerRef.current) {
+        const scrollPosition = window.scrollY
+        const parallaxSpeed = 0.5 // Controla la velocidad del efecto parallax
+
+        // Mueve el video en dirección opuesta al scroll
+        gsap.to(videoRef.current, {
+          y: scrollPosition * parallaxSpeed,
+          duration: 0.5,
+          ease: 'power1.out',
+        })
+      }
+    }
+
+    window.addEventListener('scroll', handleParallax)
+
+    return () => {
+      window.removeEventListener('scroll', handleParallax)
+    }
+  }, [])
+
   return (
     <div
-      className="relative -mt-[10.4rem] flex items-center justify-center text-white min-h-[calc(100vh-9rem)] pt-16 md:pt-20 lg:pt-0 bg-black overflow-hidden"
+      ref={containerRef}
+      className="relative -mt-[10.4rem] flex items-center justify-center text-white min-h-[calc(100vh-9rem)] pt-16 md:pt-20 lg:pt-0 bg-black overflow-hidden rounded-b-[3rem]"
       data-theme="dark"
     >
-      <div className="absolute inset-0 w-full h-full">
+      <div className="absolute inset-0 w-full h-full overflow-hidden">
         <video
           ref={videoRef}
-          className="object-cover w-full h-full opacity-0"
+          className="object-cover w-full h-[120%] opacity-0"
           src="https://res.cloudinary.com/dhq5ewbyu/video/upload/v1746471179/Bit-A/projects/Stock%20Link/xxiz4mltsjekdnsh9fpz.mp4"
           autoPlay
           muted
@@ -58,7 +82,7 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ links, media, richText 
         <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/80 to-transparent" />
       </div>
       <section className="relative py-16 sm:py-20 lg:py-24 xl:py-28 w-full h-full container">
-        <div className="px-4 mx-auto relative sm:px-6 lg:px-8 h-full">
+        <div className="mx-auto relative h-full">
           <div className="grid items-center grid-cols-1 gap-y-12 lg:grid-cols-2 gap-x-16 h-full">
             <div className="z-10">
               {richText && <RichText data={richText as DefaultTypedEditorState} />}

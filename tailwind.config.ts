@@ -30,12 +30,12 @@ const config = {
     container: {
       center: true,
       padding: {
-        '2xl': '2rem',
-        DEFAULT: '1rem',
-        lg: '2rem',
-        md: '2rem',
-        sm: '1rem',
-        xl: '2rem',
+        '2xl': '3rem',
+        DEFAULT: '2rem',
+        lg: '3rem',
+        md: '3rem',
+        sm: '2rem',
+        xl: '3rem',
       },
       screens: {
         '2xl': '86rem',

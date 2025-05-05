@@ -2,13 +2,16 @@ import React from 'react'
 
 import { HeaderThemeProvider } from './HeaderTheme'
 import { ThemeProvider } from './Theme'
+import { LenisProvider } from './Lenis'
 
 export const Providers: React.FC<{
   children: React.ReactNode
 }> = ({ children }) => {
   return (
     <ThemeProvider>
-      <HeaderThemeProvider>{children}</HeaderThemeProvider>
+      <LenisProvider>
+        <HeaderThemeProvider>{children}</HeaderThemeProvider>
+      </LenisProvider>
     </ThemeProvider>
   )
 }

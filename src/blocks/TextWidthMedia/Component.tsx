@@ -28,6 +28,7 @@ interface TextWidthMediaProps {
       rotationAngle: number
       gradientColor: string
     }
+    shadow: boolean
   }
   showOnScroll?: boolean
   textAnimation?: {
@@ -75,7 +76,7 @@ const FloatingTriangles: React.FC = () => {
         gl={{ antialias: true, alpha: true }}
         camera={{ position: [0, 0, 3.5], fov: 50 }}
       >
-        <ambientLight intensity={1.5} />
+        <ambientLight intensity={3} />
         <pointLight position={[10, 10, 10]} />
 
         {/* Triángulos flotantes */}
@@ -85,8 +86,7 @@ const FloatingTriangles: React.FC = () => {
 
         {/* Efectos de postprocesamiento */}
         <EffectComposer>
-          <Bloom intensity={2.5} luminanceThreshold={0.1} />
-          <Vignette eskil={false} offset={0.1} darkness={0.6} />
+          <Bloom intensity={0.3} luminanceThreshold={0.1} />
           <Noise opacity={0.02} />
         </EffectComposer>
       </Canvas>
@@ -98,7 +98,7 @@ export const TextWidthMedia: React.FC<Props> = ({
   text,
   media,
   layout,
-  mediaEffects = { floatingTriangles: false, hover: false },
+  mediaEffects = { floatingTriangles: false, hover: false, shadow: false },
   showOnScroll = false,
   textAnimation,
   className,
@@ -278,7 +278,10 @@ export const TextWidthMedia: React.FC<Props> = ({
         <RichText data={text} className="prose-xl" />
       </div>
       <div className="relative" ref={mediaRef}>
-        <div className="relative" ref={mediaContainerRef}>
+        <div className={cn('relative')} ref={mediaContainerRef}>
+          {/* Agrega un gradiente circular div negro estilo sombra para la imagen */}
+          <div className="absolute inset-0 rounded-full -z-10 blur-3xl opacity-25 bg-gradient-to-br from-black/0 via-muted/70 to-primary"></div>
+
           <MediaBlock
             media={media}
             blockType="mediaBlock"

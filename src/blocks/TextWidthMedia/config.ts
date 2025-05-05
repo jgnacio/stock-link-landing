@@ -59,6 +59,12 @@ export const TextWidthMedia: Block = {
       label: 'Efectos de Media',
       fields: [
         {
+          name: 'shadow',
+          type: 'checkbox',
+          label: 'Sombra',
+          defaultValue: false,
+        },
+        {
           name: 'floatingTriangles',
           type: 'checkbox',
           label: 'Efecto 3D con triángulos flotantes',

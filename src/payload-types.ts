@@ -750,6 +750,7 @@ export interface TextWidthMedia {
   media: string | Media;
   layout?: ('right' | 'left') | null;
   mediaEffects?: {
+    shadow?: boolean | null;
     floatingTriangles?: boolean | null;
     hover?: boolean | null;
     hoverEffect?: {
@@ -1171,6 +1172,7 @@ export interface TextWidthMediaSelect<T extends boolean = true> {
   mediaEffects?:
     | T
     | {
+        shadow?: T;
         floatingTriangles?: T;
         hover?: T;
         hoverEffect?:

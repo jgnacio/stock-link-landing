@@ -8,8 +8,9 @@ import React, { useRef, useEffect } from 'react'
 import { MediaBlock } from '../MediaBlock/Component'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { SplitText } from 'gsap/SplitText'
 
-gsap.registerPlugin(ScrollTrigger)
+gsap.registerPlugin(ScrollTrigger, SplitText)
 
 interface TextWidthMediaProps {
   text: any
@@ -17,8 +18,23 @@ interface TextWidthMediaProps {
   layout: 'left' | 'right'
   blockType?: string
   blockName?: string
-  imageEffect?: 'none' | 'floatingTriangles'
+  mediaEffects?: {
+    floatingTriangles: boolean
+    hover: boolean
+    hoverEffect?: {
+      rotation: boolean
+      glow: boolean
+      gradient: boolean
+      rotationAngle: number
+      gradientColor: string
+    }
+  }
   showOnScroll?: boolean
+  textAnimation?: {
+    animateOnScroll: boolean
+    animationType: 'letterStagger' | 'wordStagger'
+    animationDuration: number
+  }
 }
 
 type Props = TextWidthMediaProps & {
@@ -82,11 +98,15 @@ export const TextWidthMedia: React.FC<Props> = ({
   text,
   media,
   layout,
-  imageEffect = 'none',
+  mediaEffects = { floatingTriangles: false, hover: false },
   showOnScroll = false,
+  textAnimation,
   className,
 }) => {
   const mediaRef = useRef<HTMLDivElement>(null)
+  const textRef = useRef<HTMLDivElement>(null)
+  const gradientRef = useRef<HTMLDivElement>(null)
+  const mediaContainerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (showOnScroll && mediaRef.current) {
@@ -110,6 +130,140 @@ export const TextWidthMedia: React.FC<Props> = ({
     }
   }, [showOnScroll])
 
+  useEffect(() => {
+    if (textAnimation?.animateOnScroll && textRef.current) {
+      const type = textAnimation.animationType === 'letterStagger' ? 'chars' : 'words'
+
+      const split = new SplitText(textRef.current, { type })
+
+      const targets = type === 'chars' ? split.chars : split.words
+
+      gsap.set(targets, {
+        opacity: 0,
+        y: 40,
+      })
+
+      gsap.to(targets, {
+        opacity: 1,
+        y: 0,
+        stagger: 0.04,
+        duration: textAnimation.animationDuration,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: textRef.current,
+          start: 'top 80%',
+          toggleActions: 'play none none reverse',
+        },
+      })
+
+      return () => {
+        split.revert()
+      }
+    }
+  }, [textAnimation])
+
+  useEffect(() => {
+    if (mediaEffects.hover && mediaContainerRef.current && gradientRef.current) {
+      const mediaElement = mediaContainerRef.current
+      const gradientElement = gradientRef.current
+
+      // Configuración inicial del gradiente
+      gsap.set(gradientElement, {
+        opacity: 0,
+        background: `linear-gradient(45deg, ${mediaEffects.hoverEffect?.gradientColor || '#000000'}00, ${mediaEffects.hoverEffect?.gradientColor || '#000000'}00)`,
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        zIndex: 1,
+      })
+
+      // Efecto de hover
+      const handleMouseEnter = () => {
+        const timeline = gsap.timeline()
+
+        if (mediaEffects.hoverEffect?.rotation) {
+          timeline.to(mediaElement, {
+            rotation: mediaEffects.hoverEffect.rotationAngle || 5,
+            duration: 0.3,
+            ease: 'power2.out',
+          })
+        }
+
+        if (mediaEffects.hoverEffect?.glow) {
+          timeline.to(
+            mediaElement,
+            {
+              filter: 'brightness(1.2)',
+              duration: 0.3,
+              ease: 'power2.out',
+            },
+            '<',
+          )
+        }
+
+        if (mediaEffects.hoverEffect?.gradient) {
+          timeline.to(
+            gradientElement,
+            {
+              opacity: 1,
+              background: `linear-gradient(45deg, ${mediaEffects.hoverEffect.gradientColor || '#000000'}ff, ${mediaEffects.hoverEffect.gradientColor || '#000000'}ff)`,
+              duration: 0.3,
+              ease: 'power2.out',
+            },
+            '<',
+          )
+        }
+      }
+
+      const handleMouseLeave = () => {
+        const timeline = gsap.timeline()
+
+        if (mediaEffects.hoverEffect?.rotation) {
+          timeline.to(mediaElement, {
+            rotation: 0,
+            duration: 0.3,
+            ease: 'power2.out',
+          })
+        }
+
+        if (mediaEffects.hoverEffect?.glow) {
+          timeline.to(
+            mediaElement,
+            {
+              filter: 'brightness(1)',
+              duration: 0.3,
+              ease: 'power2.out',
+            },
+            '<',
+          )
+        }
+
+        if (mediaEffects.hoverEffect?.gradient) {
+          timeline.to(
+            gradientElement,
+            {
+              opacity: 0,
+              background: `linear-gradient(45deg, ${mediaEffects.hoverEffect.gradientColor || '#000000'}00, ${mediaEffects.hoverEffect.gradientColor || '#000000'}00)`,
+              duration: 0.3,
+              ease: 'power2.out',
+            },
+            '<',
+          )
+        }
+      }
+
+      mediaElement.addEventListener('mouseenter', handleMouseEnter)
+      mediaElement.addEventListener('mouseleave', handleMouseLeave)
+
+      return () => {
+        mediaElement.removeEventListener('mouseenter', handleMouseEnter)
+        mediaElement.removeEventListener('mouseleave', handleMouseLeave)
+      }
+    }
+  }, [mediaEffects])
+
   return (
     <div
       className={cn(
@@ -120,16 +274,25 @@ export const TextWidthMedia: React.FC<Props> = ({
         className,
       )}
     >
-      <RichText data={text} className="prose-xl" />
+      <div ref={textRef}>
+        <RichText data={text} className="prose-xl" />
+      </div>
       <div className="relative" ref={mediaRef}>
-        <MediaBlock
-          media={media}
-          blockType="mediaBlock"
-          className={cn({
-            'md:col-start-1': layout === 'left',
-          })}
-        />
-        {imageEffect === 'floatingTriangles' && <FloatingTriangles />}
+        <div className="relative" ref={mediaContainerRef}>
+          <MediaBlock
+            media={media}
+            blockType="mediaBlock"
+            className={cn({
+              'md:col-start-1': layout === 'left',
+            })}
+          />
+          {mediaEffects.hover && <div ref={gradientRef} />}
+        </div>
+        {mediaEffects.floatingTriangles && (
+          <div className="absolute bottom-0 right-0 w-32 h-32 pointer-events-none">
+            <FloatingTriangles />
+          </div>
+        )}
       </div>
     </div>
   )

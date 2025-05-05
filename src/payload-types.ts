@@ -749,8 +749,23 @@ export interface TextWidthMedia {
   };
   media: string | Media;
   layout?: ('right' | 'left') | null;
-  imageEffect?: ('none' | 'floatingTriangles') | null;
+  mediaEffects?: {
+    floatingTriangles?: boolean | null;
+    hover?: boolean | null;
+    hoverEffect?: {
+      rotation?: boolean | null;
+      glow?: boolean | null;
+      gradient?: boolean | null;
+      rotationAngle?: number | null;
+      gradientColor?: string | null;
+    };
+  };
   showOnScroll?: boolean | null;
+  textAnimation?: {
+    animateOnScroll?: boolean | null;
+    animationType?: ('letterStagger' | 'wordStagger') | null;
+    animationDuration?: number | null;
+  };
   id?: string | null;
   blockName?: string | null;
   blockType: 'textWidthMedia';
@@ -1153,8 +1168,29 @@ export interface TextWidthMediaSelect<T extends boolean = true> {
   text?: T;
   media?: T;
   layout?: T;
-  imageEffect?: T;
+  mediaEffects?:
+    | T
+    | {
+        floatingTriangles?: T;
+        hover?: T;
+        hoverEffect?:
+          | T
+          | {
+              rotation?: T;
+              glow?: T;
+              gradient?: T;
+              rotationAngle?: T;
+              gradientColor?: T;
+            };
+      };
   showOnScroll?: T;
+  textAnimation?:
+    | T
+    | {
+        animateOnScroll?: T;
+        animationType?: T;
+        animationDuration?: T;
+      };
   id?: T;
   blockName?: T;
 }

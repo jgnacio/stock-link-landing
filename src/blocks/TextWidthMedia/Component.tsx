@@ -42,16 +42,29 @@ type Props = TextWidthMediaProps & {
   className?: string
 }
 
-const FloatingTriangle: React.FC<{ position: [number, number, number]; delay: number }> = ({
-  position,
-  delay,
-}) => {
+const FloatingTriangle: React.FC<{
+  position: [number, number, number]
+  delay: number
+  speed?: number
+}> = ({ position, delay, speed = 1 }) => {
   const meshRef = useRef<any>(null)
+  const speedRef = useRef(speed)
+  const lastSpeedRef = useRef(speed)
+  const targetSpeedRef = useRef(speed)
+
+  useEffect(() => {
+    // Actualizar la velocidad objetivo
+    targetSpeedRef.current = speed
+  }, [speed])
 
   useFrame((state) => {
     if (meshRef.current) {
-      meshRef.current.rotation.y += 0.01
-      meshRef.current.position.y = Math.sin(state.clock.elapsedTime + delay) * 0.2 + position[1]
+      // Interpolación suave de la velocidad
+      speedRef.current += (targetSpeedRef.current - speedRef.current) * 0.01
+
+      meshRef.current.rotation.y += 0.01 * speedRef.current
+      meshRef.current.position.y =
+        Math.sin(state.clock.elapsedTime * speedRef.current + delay) * 0.2 + position[1]
     }
   })
 
@@ -68,23 +81,22 @@ const FloatingTriangle: React.FC<{ position: [number, number, number]; delay: nu
     </mesh>
   )
 }
-const FloatingTriangles: React.FC = () => {
+
+const FloatingTriangles: React.FC<{ isHovered?: boolean }> = ({ isHovered = false }) => {
   return (
     <div className="absolute bottom-0 right-0 w-32 h-32">
       <Canvas
-        dpr={[1, 2]} // Ajuste para pantallas de alta densidad
+        dpr={[1, 2]}
         gl={{ antialias: true, alpha: true }}
         camera={{ position: [0, 0, 3.5], fov: 50 }}
       >
         <ambientLight intensity={3} />
         <pointLight position={[10, 10, 10]} />
 
-        {/* Triángulos flotantes */}
-        <FloatingTriangle position={[0, 0, 0]} delay={0} />
-        <FloatingTriangle position={[0.5, 0.2, 1]} delay={1} />
-        <FloatingTriangle position={[0.3, 0.1, 2]} delay={2} />
+        <FloatingTriangle position={[0, 0, 0]} delay={0} speed={isHovered ? 2 : 1} />
+        <FloatingTriangle position={[0.5, 0.2, 1]} delay={1} speed={isHovered ? 2 : 1} />
+        <FloatingTriangle position={[0.3, 0.1, 2]} delay={2} speed={isHovered ? 2 : 1} />
 
-        {/* Efectos de postprocesamiento */}
         <EffectComposer>
           <Bloom intensity={0.3} luminanceThreshold={0.1} />
           <Noise opacity={0.02} />
@@ -107,6 +119,8 @@ export const TextWidthMedia: React.FC<Props> = ({
   const textRef = useRef<HTMLDivElement>(null)
   const gradientRef = useRef<HTMLDivElement>(null)
   const mediaContainerRef = useRef<HTMLDivElement>(null)
+  const timelineRef = useRef<gsap.core.Timeline | null>(null)
+  const [isHovered, setIsHovered] = React.useState(false)
 
   useEffect(() => {
     if (showOnScroll && mediaRef.current) {
@@ -181,36 +195,37 @@ export const TextWidthMedia: React.FC<Props> = ({
 
       // Efecto de hover
       const handleMouseEnter = () => {
-        const timeline = gsap.timeline()
+        // Si hay una animación en curso, la revertimos
+        if (timelineRef.current) {
+          timelineRef.current.kill()
+        }
+
+        timelineRef.current = gsap.timeline({
+          defaults: { duration: 0.3, ease: 'power2.out' },
+        })
 
         if (mediaEffects.hoverEffect?.rotation) {
-          timeline.to(mediaElement, {
+          timelineRef.current.to(mediaElement, {
             rotation: mediaEffects.hoverEffect.rotationAngle || 5,
-            duration: 0.3,
-            ease: 'power2.out',
           })
         }
 
         if (mediaEffects.hoverEffect?.glow) {
-          timeline.to(
+          timelineRef.current.to(
             mediaElement,
             {
               filter: 'brightness(1.2)',
-              duration: 0.3,
-              ease: 'power2.out',
             },
             '<',
           )
         }
 
         if (mediaEffects.hoverEffect?.gradient) {
-          timeline.to(
+          timelineRef.current.to(
             gradientElement,
             {
               opacity: 1,
               background: `linear-gradient(45deg, ${mediaEffects.hoverEffect.gradientColor || '#000000'}ff, ${mediaEffects.hoverEffect.gradientColor || '#000000'}ff)`,
-              duration: 0.3,
-              ease: 'power2.out',
             },
             '<',
           )
@@ -218,36 +233,37 @@ export const TextWidthMedia: React.FC<Props> = ({
       }
 
       const handleMouseLeave = () => {
-        const timeline = gsap.timeline()
+        // Si hay una animación en curso, la revertimos
+        if (timelineRef.current) {
+          timelineRef.current.kill()
+        }
+
+        timelineRef.current = gsap.timeline({
+          defaults: { duration: 0.3, ease: 'power2.out' },
+        })
 
         if (mediaEffects.hoverEffect?.rotation) {
-          timeline.to(mediaElement, {
+          timelineRef.current.to(mediaElement, {
             rotation: 0,
-            duration: 0.3,
-            ease: 'power2.out',
           })
         }
 
         if (mediaEffects.hoverEffect?.glow) {
-          timeline.to(
+          timelineRef.current.to(
             mediaElement,
             {
               filter: 'brightness(1)',
-              duration: 0.3,
-              ease: 'power2.out',
             },
             '<',
           )
         }
 
         if (mediaEffects.hoverEffect?.gradient) {
-          timeline.to(
+          timelineRef.current.to(
             gradientElement,
             {
               opacity: 0,
               background: `linear-gradient(45deg, ${mediaEffects.hoverEffect.gradientColor || '#000000'}00, ${mediaEffects.hoverEffect.gradientColor || '#000000'}00)`,
-              duration: 0.3,
-              ease: 'power2.out',
             },
             '<',
           )
@@ -258,6 +274,9 @@ export const TextWidthMedia: React.FC<Props> = ({
       mediaElement.addEventListener('mouseleave', handleMouseLeave)
 
       return () => {
+        if (timelineRef.current) {
+          timelineRef.current.kill()
+        }
         mediaElement.removeEventListener('mouseenter', handleMouseEnter)
         mediaElement.removeEventListener('mouseleave', handleMouseLeave)
       }
@@ -277,9 +296,13 @@ export const TextWidthMedia: React.FC<Props> = ({
       <div ref={textRef}>
         <RichText data={text} className="prose-xl" />
       </div>
-      <div className="relative" ref={mediaRef}>
+      <div
+        className="relative"
+        ref={mediaRef}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         <div className={cn('relative')} ref={mediaContainerRef}>
-          {/* Agrega un gradiente circular div negro estilo sombra para la imagen */}
           <div className="absolute inset-0 rounded-full -z-10 blur-3xl opacity-25 bg-gradient-to-br from-black/0 via-muted/70 to-primary"></div>
 
           <MediaBlock
@@ -293,7 +316,7 @@ export const TextWidthMedia: React.FC<Props> = ({
         </div>
         {mediaEffects.floatingTriangles && (
           <div className="absolute bottom-0 right-0 w-32 h-32 pointer-events-none">
-            <FloatingTriangles />
+            <FloatingTriangles isHovered={isHovered} />
           </div>
         )}
       </div>

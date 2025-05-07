@@ -6,6 +6,7 @@ import { cn } from '@/utilities/ui'
 import React, { useRef, useEffect } from 'react'
 import { MediaBlock } from '../MediaBlock/Component'
 import gsap from 'gsap'
+import { useGSAP } from '@gsap/react'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
 
@@ -80,7 +81,7 @@ export const TextWidthMedia: React.FC<Props> = ({
   const timelineRef = useRef<gsap.core.Timeline | null>(null)
   const [isHovered, setIsHovered] = React.useState(false)
 
-  useEffect(() => {
+  useGSAP(() => {
     if (showOnScroll && mediaRef.current) {
       gsap.fromTo(
         mediaRef.current,
@@ -102,7 +103,7 @@ export const TextWidthMedia: React.FC<Props> = ({
     }
   }, [showOnScroll])
 
-  useEffect(() => {
+  useGSAP(() => {
     if (textAnimation?.animateOnScroll && textRef.current) {
       const type = textAnimation.animationType === 'letterStagger' ? 'chars' : 'words'
 
@@ -134,7 +135,7 @@ export const TextWidthMedia: React.FC<Props> = ({
     }
   }, [textAnimation])
 
-  useEffect(() => {
+  useGSAP(() => {
     if (mediaEffects.hover && mediaContainerRef.current && gradientRef.current) {
       const mediaElement = mediaContainerRef.current
       const gradientElement = gradientRef.current

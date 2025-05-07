@@ -15,7 +15,7 @@ export default function MainBlock({ className }: Props) {
   return (
     <div className={cn('main-block', className)}>
       <Overview />
-      <Features />
+      <Features darkMode={true} />
       <QuoteDisplay />
       <CTAHurt />
       <CTATeamHurt />

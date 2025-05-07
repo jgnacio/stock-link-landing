@@ -14,10 +14,30 @@ interface HeaderClientProps {
 }
 
 export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
-  /* Storing the value in a useState to avoid hydration errors */
   const [theme, setTheme] = useState<string | null>(null)
+  const [isVisible, setIsVisible] = useState(true)
+  const [lastScrollY, setLastScrollY] = useState(0)
   const { headerTheme, setHeaderTheme } = useHeaderTheme()
   const pathname = usePathname()
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+
+      if (currentScrollY > lastScrollY) {
+        // Scroll hacia abajo
+        setIsVisible(false)
+      } else {
+        // Scroll hacia arriba
+        setIsVisible(true)
+      }
+
+      setLastScrollY(currentScrollY)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [lastScrollY])
 
   useEffect(() => {
     setHeaderTheme(null)
@@ -30,12 +50,21 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   }, [headerTheme])
 
   return (
-    <header className="container relative z-20   " {...(theme ? { 'data-theme': theme } : {})}>
-      <div className="py-8 flex justify-between">
-        <Link href="/">
-          <Logo loading="eager" priority="high" className="invert dark:invert-0" />
-        </Link>
-        <HeaderNav data={data} />
+    <header
+      className={`z-50 sticky top-4 transition-all duration-300 ${
+        isVisible ? 'translate-y-0' : '-translate-y-full'
+      }`}
+      {...(theme ? { 'data-theme': theme } : {})}
+    >
+      <div className="container mx-auto px-4">
+        <div className="bg-black/80 backdrop-blur-md rounded-xl shadow-lg border border-white/10 max-w-4xl mx-auto">
+          <div className="py-4 px-6 flex justify-between items-center">
+            <Link href="/">
+              <Logo loading="eager" priority="high" className="invert dark:invert-0 w-32" />
+            </Link>
+            <HeaderNav data={data} />
+          </div>
+        </div>
       </div>
     </header>
   )

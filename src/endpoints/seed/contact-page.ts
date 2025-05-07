@@ -12,7 +12,55 @@ export const contact: (args: ContactArgs) => RequiredDataFromCollectionSlug<'pag
     slug: 'contact',
     _status: 'published',
     hero: {
-      type: 'none',
+      type: 'lowImpact',
+      richText: {
+        root: {
+          type: 'root',
+          children: [
+            {
+              type: 'heading',
+              children: [
+                {
+                  type: 'text',
+                  detail: 0,
+                  format: 0,
+                  mode: 'normal',
+                  style: '',
+                  text: 'Contáctanos',
+                  version: 1,
+                },
+              ],
+              direction: 'ltr',
+              format: '',
+              indent: 0,
+              tag: 'h1',
+              version: 1,
+            },
+            {
+              type: 'paragraph',
+              children: [
+                {
+                  type: 'text',
+                  detail: 0,
+                  format: 0,
+                  mode: 'normal',
+                  style: '',
+                  text: 'Estamos aquí para ayudarte. Envíanos un mensaje y nos pondremos en contacto contigo lo antes posible.',
+                  version: 1,
+                },
+              ],
+              direction: 'ltr',
+              format: '',
+              indent: 0,
+              version: 1,
+            },
+          ],
+          direction: 'ltr',
+          format: '',
+          indent: 0,
+          version: 1,
+        },
+      },
     },
     layout: [
       {
@@ -32,14 +80,32 @@ export const contact: (args: ContactArgs) => RequiredDataFromCollectionSlug<'pag
                     format: 0,
                     mode: 'normal',
                     style: '',
-                    text: 'Example contact form:',
+                    text: 'Envíanos un mensaje',
                     version: 1,
                   },
                 ],
                 direction: 'ltr',
                 format: '',
                 indent: 0,
-                tag: 'h3',
+                tag: 'h2',
+                version: 1,
+              },
+              {
+                type: 'paragraph',
+                children: [
+                  {
+                    type: 'text',
+                    detail: 0,
+                    format: 0,
+                    mode: 'normal',
+                    style: '',
+                    text: 'Completa el formulario a continuación y nuestro equipo te responderá en breve.',
+                    version: 1,
+                  },
+                ],
+                direction: 'ltr',
+                format: '',
+                indent: 0,
                 version: 1,
               },
             ],
@@ -51,6 +117,6 @@ export const contact: (args: ContactArgs) => RequiredDataFromCollectionSlug<'pag
         },
       },
     ],
-    title: 'Contact',
+    title: 'Contacto',
   }
 }

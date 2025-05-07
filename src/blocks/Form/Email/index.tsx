@@ -16,23 +16,42 @@ export const Email: React.FC<
 > = ({ name, defaultValue, errors, label, register, required, width }) => {
   return (
     <Width width={width}>
-      <Label htmlFor={name}>
-        {label}
-
-        {required && (
-          <span className="required">
-            * <span className="sr-only">(required)</span>
-          </span>
-        )}
-      </Label>
-      <Input
-        defaultValue={defaultValue}
-        id={name}
-        type="text"
-        {...register(name, { pattern: /^\S[^\s@]*@\S+$/, required })}
-      />
-
-      {errors[name] && <Error name={name} />}
+      <div className="space-y-2">
+        <Label htmlFor={name} className="text-sm font-medium text-gray-700">
+          {label}
+          {required && (
+            <span className="text-red-500 ml-1">
+              * <span className="sr-only">(requerido)</span>
+            </span>
+          )}
+        </Label>
+        <div className="relative">
+          <Input
+            defaultValue={defaultValue}
+            id={name}
+            type="email"
+            className="w-full bg-gray-50 border border-gray-200 pl-10 transition-colors focus:border-primary focus:ring-1 focus:ring-primary"
+            placeholder="ejemplo@correo.com"
+            {...register(name, { pattern: /^\S[^\s@]*@\S+$/, required })}
+          />
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg
+              className="h-5 w-5 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+              />
+            </svg>
+          </div>
+        </div>
+        {errors[name] && <Error name={name} />}
+      </div>
     </Width>
   )
 }

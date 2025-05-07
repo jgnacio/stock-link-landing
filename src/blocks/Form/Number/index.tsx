@@ -27,6 +27,7 @@ export const Number: React.FC<
       <Input
         defaultValue={defaultValue}
         id={name}
+        className="w-full bg-gray-50 border border-gray-200 transition-colors focus:border-primary focus:ring-1 focus:ring-primary"
         type="number"
         {...register(name, { required })}
       />

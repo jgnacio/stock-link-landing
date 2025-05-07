@@ -85,7 +85,7 @@ const CTATeamHurt: React.FC = () => {
   }, [])
 
   return (
-    <div className="py-40  relative overflow-x-clip">
+    <div className="py-20 md:py-40 relative overflow-x-clip">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
         <div className="flex flex-col md:flex-row items-center justify-end gap-8 relative">
           <Image
@@ -95,7 +95,7 @@ const CTATeamHurt: React.FC = () => {
             height={600}
             className="hidden md:block absolute  -left-20 z-30 select-none pointer-events-none"
           />
-          <div ref={containerRef} className="w-full md:w-1/2 text-right">
+          <div ref={containerRef} className="w-full md:w-1/2 text-center md:text-right">
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 tracking-tight">
               Un canal de ventas digital, que no reemplaza a tu equipo.
             </h2>

@@ -191,7 +191,27 @@ export interface Page {
       | null;
     media?: (string | null) | Media;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock | TextWidthMedia)[];
+  layout: (
+    | CallToActionBlock
+    | ContentBlock
+    | MediaBlock
+    | ArchiveBlock
+    | FormBlock
+    | TextWidthMedia
+    | {
+        projectId: string;
+        scale?: number | null;
+        dpi?: number | null;
+        lazyLoad?: boolean | null;
+        production?: boolean | null;
+        altText?: string | null;
+        ariaLabel?: string | null;
+        disableMobile?: boolean | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'unicornStudio';
+      }
+  )[];
   meta?: {
     title?: string | null;
     /**
@@ -732,6 +752,30 @@ export interface Form {
  * via the `definition` "textWidthMedia".
  */
 export interface TextWidthMedia {
+  spacing?: {
+    /**
+     * Controla cuánto se desplaza el bloque hacia arriba usando posicionamiento relativo
+     */
+    verticalOffset?: number | null;
+    /**
+     * Espacio interno superior del contenido
+     */
+    paddingTop?: number | null;
+    verticalPadding?: {
+      /**
+       * Espaciado vertical en dispositivos móviles
+       */
+      mobile?: number | null;
+      /**
+       * Espaciado vertical en tablets
+       */
+      tablet?: number | null;
+      /**
+       * Espaciado vertical en desktop
+       */
+      desktop?: number | null;
+    };
+  };
   text: {
     root: {
       type: string;
@@ -749,6 +793,17 @@ export interface TextWidthMedia {
   };
   media: string | Media;
   layout?: ('right' | 'left') | null;
+  darkMode?: {
+    enabled?: boolean | null;
+    /**
+     * Ingresa un color en formato hexadecimal (ej: #1a1a1a)
+     */
+    backgroundColor?: string | null;
+    /**
+     * Ingresa un color en formato hexadecimal (ej: #ffffff)
+     */
+    textColor?: string | null;
+  };
   mediaEffects?: {
     shadow?: boolean | null;
     floatingTriangles?: boolean | null;
@@ -758,6 +813,9 @@ export interface TextWidthMedia {
       glow?: boolean | null;
       gradient?: boolean | null;
       rotationAngle?: number | null;
+      /**
+       * Ingresa un color en formato hexadecimal (ej: #000000)
+       */
       gradientColor?: string | null;
     };
   };
@@ -1062,6 +1120,20 @@ export interface PagesSelect<T extends boolean = true> {
         archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
         textWidthMedia?: T | TextWidthMediaSelect<T>;
+        unicornStudio?:
+          | T
+          | {
+              projectId?: T;
+              scale?: T;
+              dpi?: T;
+              lazyLoad?: T;
+              production?: T;
+              altText?: T;
+              ariaLabel?: T;
+              disableMobile?: T;
+              id?: T;
+              blockName?: T;
+            };
       };
   meta?:
     | T
@@ -1166,9 +1238,29 @@ export interface FormBlockSelect<T extends boolean = true> {
  * via the `definition` "textWidthMedia_select".
  */
 export interface TextWidthMediaSelect<T extends boolean = true> {
+  spacing?:
+    | T
+    | {
+        verticalOffset?: T;
+        paddingTop?: T;
+        verticalPadding?:
+          | T
+          | {
+              mobile?: T;
+              tablet?: T;
+              desktop?: T;
+            };
+      };
   text?: T;
   media?: T;
   layout?: T;
+  darkMode?:
+    | T
+    | {
+        enabled?: T;
+        backgroundColor?: T;
+        textColor?: T;
+      };
   mediaEffects?:
     | T
     | {

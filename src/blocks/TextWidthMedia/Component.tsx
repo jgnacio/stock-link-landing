@@ -1,9 +1,8 @@
 'use client'
+import './styles.css'
 import RichText from '@/components/RichText'
 import type { Media } from '@/payload-types'
 import { cn } from '@/utilities/ui'
-import { Canvas, useFrame } from '@react-three/fiber'
-import { Bloom, EffectComposer, Noise, Vignette } from '@react-three/postprocessing'
 import React, { useRef, useEffect } from 'react'
 import { MediaBlock } from '../MediaBlock/Component'
 import gsap from 'gsap'
@@ -18,8 +17,21 @@ interface TextWidthMediaProps {
   layout: 'left' | 'right'
   blockType?: string
   blockName?: string
+  spacing?: {
+    verticalOffset: number
+    paddingTop: number
+    verticalPadding: {
+      mobile: number
+      tablet: number
+      desktop: number
+    }
+  }
+  darkMode?: {
+    enabled: boolean
+    backgroundColor: string
+    textColor: string
+  }
   mediaEffects?: {
-    floatingTriangles: boolean
     hover: boolean
     hoverEffect?: {
       rotation: boolean
@@ -42,75 +54,21 @@ type Props = TextWidthMediaProps & {
   className?: string
 }
 
-const FloatingTriangle: React.FC<{
-  position: [number, number, number]
-  delay: number
-  speed?: number
-}> = ({ position, delay, speed = 1 }) => {
-  const meshRef = useRef<any>(null)
-  const speedRef = useRef(speed)
-  const lastSpeedRef = useRef(speed)
-  const targetSpeedRef = useRef(speed)
-
-  useEffect(() => {
-    // Actualizar la velocidad objetivo
-    targetSpeedRef.current = speed
-  }, [speed])
-
-  useFrame((state) => {
-    if (meshRef.current) {
-      // Interpolación suave de la velocidad
-      speedRef.current += (targetSpeedRef.current - speedRef.current) * 0.01
-
-      meshRef.current.rotation.y += 0.01 * speedRef.current
-      meshRef.current.position.y =
-        Math.sin(state.clock.elapsedTime * speedRef.current + delay) * 0.2 + position[1]
-    }
-  })
-
-  return (
-    <mesh ref={meshRef} position={position}>
-      <coneGeometry args={[0.3, 0.6, 3]} />
-      <meshStandardMaterial
-        color="#DEFC4F"
-        emissive="#DEFC4F"
-        emissiveIntensity={0.5}
-        transparent
-        opacity={0.4}
-      />
-    </mesh>
-  )
-}
-
-const FloatingTriangles: React.FC<{ isHovered?: boolean }> = ({ isHovered = false }) => {
-  return (
-    <div className="absolute bottom-0 right-0 w-32 h-32">
-      <Canvas
-        dpr={[1, 2]}
-        gl={{ antialias: true, alpha: true }}
-        camera={{ position: [0, 0, 3.5], fov: 50 }}
-      >
-        <ambientLight intensity={3} />
-        <pointLight position={[10, 10, 10]} />
-
-        <FloatingTriangle position={[0, 0, 0]} delay={0} speed={isHovered ? 2 : 1} />
-        <FloatingTriangle position={[0.5, 0.2, 1]} delay={1} speed={isHovered ? 2 : 1} />
-        <FloatingTriangle position={[0.3, 0.1, 2]} delay={2} speed={isHovered ? 2 : 1} />
-
-        <EffectComposer>
-          <Bloom intensity={0.3} luminanceThreshold={0.1} />
-          <Noise opacity={0.02} />
-        </EffectComposer>
-      </Canvas>
-    </div>
-  )
-}
-
 export const TextWidthMedia: React.FC<Props> = ({
   text,
   media,
   layout,
-  mediaEffects = { floatingTriangles: false, hover: false, shadow: false },
+  spacing = {
+    verticalOffset: 16,
+    paddingTop: 16,
+    verticalPadding: {
+      mobile: 6,
+      tablet: 12,
+      desktop: 16,
+    },
+  },
+  darkMode = { enabled: false, backgroundColor: '#1a1a1a', textColor: '#ffffff' },
+  mediaEffects = { hover: false, shadow: false },
   showOnScroll = false,
   textAnimation,
   className,
@@ -286,39 +244,51 @@ export const TextWidthMedia: React.FC<Props> = ({
   return (
     <div
       className={cn(
-        'grid gap-8 md:grid-cols-2 items-center container',
+        'w-full relative -z-10',
         {
           'md:grid-flow-dense': layout === 'left',
         },
         className,
       )}
+      style={{
+        backgroundColor: darkMode.enabled ? darkMode.backgroundColor : 'transparent',
+        color: darkMode.enabled ? darkMode.textColor : 'inherit',
+        top: `-${spacing.verticalOffset}px`,
+      }}
     >
-      <div ref={textRef}>
-        <RichText data={text} className="prose-xl" />
-      </div>
       <div
-        className="relative"
-        ref={mediaRef}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        className={cn('grid gap-8 md:grid-cols-2 items-center container', 'custom-padding')}
+        style={
+          {
+            '--padding-top': `${spacing.paddingTop}px`,
+            '--padding-bottom-mobile': `${spacing.verticalPadding.mobile}px`,
+            '--padding-bottom-tablet': `${spacing.verticalPadding.tablet}px`,
+            '--padding-bottom-desktop': `${spacing.verticalPadding.desktop}px`,
+          } as React.CSSProperties
+        }
       >
-        <div className={cn('relative')} ref={mediaContainerRef}>
-          <div className="absolute inset-0 rounded-full -z-10 blur-3xl opacity-25 bg-gradient-to-br from-black/0 via-muted/70 to-primary"></div>
-
-          <MediaBlock
-            media={media}
-            blockType="mediaBlock"
-            className={cn({
-              'md:col-start-1': layout === 'left',
-            })}
-          />
-          {mediaEffects.hover && <div ref={gradientRef} />}
+        <div ref={textRef}>
+          <RichText data={text} className="prose-xl" />
         </div>
-        {mediaEffects.floatingTriangles && (
-          <div className="absolute bottom-0 right-0 w-32 h-32 pointer-events-none">
-            <FloatingTriangles isHovered={isHovered} />
+        <div
+          className="relative"
+          ref={mediaRef}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          <div className={cn('relative')} ref={mediaContainerRef}>
+            <div className="absolute inset-0 rounded-full -z-10 blur-3xl opacity-25 bg-gradient-to-br from-black/0 via-muted/70 to-primary"></div>
+
+            <MediaBlock
+              media={media}
+              blockType="mediaBlock"
+              className={cn({
+                'md:col-start-1': layout === 'left',
+              })}
+            />
+            {mediaEffects.hover && <div ref={gradientRef} />}
           </div>
-        )}
+        </div>
       </div>
     </div>
   )

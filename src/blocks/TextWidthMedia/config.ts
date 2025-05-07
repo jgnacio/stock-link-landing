@@ -15,6 +15,76 @@ export const TextWidthMedia: Block = {
   },
   fields: [
     {
+      name: 'spacing',
+      type: 'group',
+      label: 'Espaciado',
+      fields: [
+        {
+          name: 'verticalOffset',
+          type: 'number',
+          label: 'Desplazamiento hacia arriba (px)',
+          defaultValue: 16,
+          min: 0,
+          max: 100,
+          admin: {
+            description:
+              'Controla cuánto se desplaza el bloque hacia arriba usando posicionamiento relativo',
+          },
+        },
+        {
+          name: 'paddingTop',
+          type: 'number',
+          label: 'Espacio superior interno (px)',
+          defaultValue: 16,
+          min: 0,
+          max: 100,
+          admin: {
+            description: 'Espacio interno superior del contenido',
+          },
+        },
+        {
+          name: 'verticalPadding',
+          type: 'group',
+          label: 'Espaciado vertical interno',
+          fields: [
+            {
+              name: 'mobile',
+              type: 'number',
+              label: 'Móvil (px)',
+              defaultValue: 6,
+              min: 0,
+              max: 100,
+              admin: {
+                description: 'Espaciado vertical en dispositivos móviles',
+              },
+            },
+            {
+              name: 'tablet',
+              type: 'number',
+              label: 'Tablet (px)',
+              defaultValue: 12,
+              min: 0,
+              max: 100,
+              admin: {
+                description: 'Espaciado vertical en tablets',
+              },
+            },
+            {
+              name: 'desktop',
+              type: 'number',
+              label: 'Desktop (px)',
+              defaultValue: 16,
+              min: 0,
+              max: 100,
+              admin: {
+                description: 'Espaciado vertical en desktop',
+              },
+            },
+          ],
+        },
+      ],
+    },
+    {
       name: 'text',
       type: 'richText',
       label: 'Texto',
@@ -52,6 +122,39 @@ export const TextWidthMedia: Block = {
         },
       ],
       defaultValue: 'right',
+    },
+    {
+      name: 'darkMode',
+      type: 'group',
+      label: 'Modo Oscuro',
+      fields: [
+        {
+          name: 'enabled',
+          type: 'checkbox',
+          label: 'Habilitar modo oscuro',
+          defaultValue: false,
+        },
+        {
+          name: 'backgroundColor',
+          type: 'text',
+          label: 'Color de fondo (hex)',
+          defaultValue: '#1a1a1a',
+          admin: {
+            description: 'Ingresa un color en formato hexadecimal (ej: #1a1a1a)',
+            condition: (data, siblingData) => siblingData?.enabled === true,
+          },
+        },
+        {
+          name: 'textColor',
+          type: 'text',
+          label: 'Color del texto (hex)',
+          defaultValue: '#ffffff',
+          admin: {
+            description: 'Ingresa un color en formato hexadecimal (ej: #ffffff)',
+            condition: (data, siblingData) => siblingData?.enabled === true,
+          },
+        },
+      ],
     },
     {
       name: 'mediaEffects',
@@ -113,9 +216,10 @@ export const TextWidthMedia: Block = {
             {
               name: 'gradientColor',
               type: 'text',
-              label: 'Color del gradiente',
+              label: 'Color del gradiente (hex)',
               defaultValue: '#000000',
               admin: {
+                description: 'Ingresa un color en formato hexadecimal (ej: #000000)',
                 condition: (data, siblingData) => siblingData?.gradient === true,
               },
             },

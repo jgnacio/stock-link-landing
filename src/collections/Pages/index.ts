@@ -8,6 +8,7 @@ import { Content } from '../../blocks/Content/config'
 import { FormBlock } from '../../blocks/Form/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { TextWidthMedia } from '../../blocks/TextWidthMedia/config'
+import { UnicornStudioBlock } from '../../blocks/RenderUnicornStudio/config'
 import { hero } from '@/heros/config'
 import { slugField } from '@/fields/slug'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -76,7 +77,15 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock, TextWidthMedia],
+              blocks: [
+                CallToAction,
+                Content,
+                MediaBlock,
+                Archive,
+                FormBlock,
+                TextWidthMedia,
+                UnicornStudioBlock,
+              ],
               required: true,
               admin: {
                 initCollapsed: true,

@@ -174,7 +174,10 @@ const config = {
               h2: {
                 fontSize: '1.875rem',
                 '@media (min-width: 768px)': {
-                  fontSize: '2.25rem',
+                  fontSize: '2.5rem',
+                },
+                '@media (min-width: 1024px)': {
+                  fontSize: '4.5rem',
                 },
               },
               h3: {

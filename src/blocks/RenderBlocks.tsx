@@ -8,6 +8,8 @@ import { ContentBlock } from '@/blocks/Content/Component'
 import { FormBlock } from '@/blocks/Form/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { TextWidthMedia } from './TextWidthMedia/Component'
+import UnicornScene from './RenderUnicornStudio/Component'
+import type { UnicornStudioConfig } from './RenderUnicornStudio/config'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -16,6 +18,7 @@ const blockComponents = {
   formBlock: FormBlock,
   mediaBlock: MediaBlock,
   textWidthMedia: TextWidthMedia,
+  unicornStudio: UnicornScene,
 }
 
 export const RenderBlocks: React.FC<{
@@ -35,8 +38,36 @@ export const RenderBlocks: React.FC<{
             const Block = blockComponents[blockType]
 
             if (Block) {
+              if (blockType === 'unicornStudio') {
+                const {
+                  projectId,
+                  scale,
+                  dpi,
+                  lazyLoad,
+                  production,
+                  altText,
+                  ariaLabel,
+                  disableMobile,
+                } = block
+                const unicornConfig: Pick<UnicornStudioConfig, 'projectId'> &
+                  Partial<Omit<UnicornStudioConfig, 'projectId'>> = {
+                  projectId,
+                  ...(scale !== null && { scale }),
+                  ...(dpi !== null && { dpi }),
+                  ...(lazyLoad !== null && { lazyLoad }),
+                  ...(production !== null && { production }),
+                  ...(altText !== null && { altText }),
+                  ...(ariaLabel !== null && { ariaLabel }),
+                  ...(disableMobile !== null && { disableMobile }),
+                }
+                return (
+                  <div key={index}>
+                    <UnicornScene config={unicornConfig} />
+                  </div>
+                )
+              }
               return (
-                <div className="my-16" key={index}>
+                <div key={index}>
                   {/* @ts-expect-error there may be some mismatch between the expected types here */}
                   <Block {...block} disableInnerContainer />
                 </div>

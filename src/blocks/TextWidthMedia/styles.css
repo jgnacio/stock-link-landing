@@ -1,0 +1,16 @@
+.custom-padding {
+  padding-top: var(--padding-top);
+  padding-bottom: var(--padding-bottom-mobile);
+}
+
+@media (min-width: 640px) {
+  .custom-padding {
+    padding-bottom: var(--padding-bottom-tablet);
+  }
+}
+
+@media (min-width: 768px) {
+  .custom-padding {
+    padding-bottom: var(--padding-bottom-desktop);
+  }
+}

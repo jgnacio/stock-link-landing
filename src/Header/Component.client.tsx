@@ -57,7 +57,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
       {...(theme ? { 'data-theme': theme } : {})}
     >
       <div className="container mx-auto px-4">
-        <div className="bg-black/80 backdrop-blur-md rounded-xl shadow-lg border border-white/10 max-w-4xl mx-auto">
+        <div className="bg-black/50 backdrop-blur-md rounded-xl shadow-lg border border-white/10 max-w-4xl mx-auto">
           <div className="py-4 px-6 flex justify-between items-center">
             <Link href="/">
               <Logo loading="eager" priority="high" className="invert dark:invert-0 w-32" />
@@ -65,6 +65,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
             <HeaderNav data={data} />
           </div>
         </div>
+        <div className="w-full blur-3xl h-20 bg-black/50  -z-10 absolute -top-32 backdrop-blur-3xl  left-0 right-0 bottom-0"></div>
       </div>
     </header>
   )

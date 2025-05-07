@@ -91,13 +91,8 @@ const UnicornScene: React.FC<UnicornSceneProps> = ({ config }) => {
   }
 
   return (
-    <div className=" max-h-[300px] flex justify-center items-center overflow-hidden mix-blend-screen">
-      <div
-        ref={containerRef}
-        id="unicorn-scene"
-        className="unicorn-embed "
-        style={{ width: '100%', height: '500px' }}
-      ></div>
+    <div className=" -mt-[400px] max-h-[400px]  flex justify-center items-start overflow-hidden mix-blend-screen">
+      <div ref={containerRef} id="unicorn-scene" style={{ width: '100%', height: '100%' }}></div>
     </div>
   )
 }

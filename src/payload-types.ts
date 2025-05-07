@@ -211,6 +211,8 @@ export interface Page {
         blockName?: string | null;
         blockType: 'unicornStudio';
       }
+    | StackedBlock
+    | MainBlock
   )[];
   meta?: {
     title?: string | null;
@@ -831,6 +833,80 @@ export interface TextWidthMedia {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "stackedBlock".
+ */
+export interface StackedBlock {
+  items?:
+    | {
+        content?:
+          | (
+              | ContentBlock
+              | MediaBlock
+              | CallToActionBlock
+              | BannerBlock
+              | TextWidthMedia
+              | {
+                  projectId: string;
+                  scale?: number | null;
+                  dpi?: number | null;
+                  lazyLoad?: boolean | null;
+                  production?: boolean | null;
+                  altText?: string | null;
+                  ariaLabel?: string | null;
+                  disableMobile?: boolean | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'unicornStudio';
+                }
+            )[]
+          | null;
+        /**
+         * Controla el orden de apilamiento de los elementos (0-100)
+         */
+        zIndex: number;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'stackedBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BannerBlock".
+ */
+export interface BannerBlock {
+  style: 'info' | 'warning' | 'error' | 'success';
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'banner';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MainBlock".
+ */
+export interface MainBlock {
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'mainBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1134,6 +1210,8 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        stackedBlock?: T | StackedBlockSelect<T>;
+        mainBlock?: T | MainBlockSelect<T>;
       };
   meta?:
     | T
@@ -1285,6 +1363,61 @@ export interface TextWidthMediaSelect<T extends boolean = true> {
         animationType?: T;
         animationDuration?: T;
       };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "stackedBlock_select".
+ */
+export interface StackedBlockSelect<T extends boolean = true> {
+  items?:
+    | T
+    | {
+        content?:
+          | T
+          | {
+              content?: T | ContentBlockSelect<T>;
+              mediaBlock?: T | MediaBlockSelect<T>;
+              cta?: T | CallToActionBlockSelect<T>;
+              banner?: T | BannerBlockSelect<T>;
+              textWidthMedia?: T | TextWidthMediaSelect<T>;
+              unicornStudio?:
+                | T
+                | {
+                    projectId?: T;
+                    scale?: T;
+                    dpi?: T;
+                    lazyLoad?: T;
+                    production?: T;
+                    altText?: T;
+                    ariaLabel?: T;
+                    disableMobile?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+            };
+        zIndex?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BannerBlock_select".
+ */
+export interface BannerBlockSelect<T extends boolean = true> {
+  style?: T;
+  content?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MainBlock_select".
+ */
+export interface MainBlockSelect<T extends boolean = true> {
   id?: T;
   blockName?: T;
 }
@@ -1827,31 +1960,6 @@ export interface TaskSchedulePublish {
     user?: (string | null) | User;
   };
   output?: unknown;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "BannerBlock".
- */
-export interface BannerBlock {
-  style: 'info' | 'warning' | 'error' | 'success';
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'banner';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

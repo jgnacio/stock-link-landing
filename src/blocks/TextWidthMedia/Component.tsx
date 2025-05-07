@@ -283,7 +283,7 @@ export const TextWidthMedia: React.FC<Props> = ({
               media={media}
               blockType="mediaBlock"
               className={cn({
-                'md:col-start-1': layout === 'left',
+                'md:col-start-1 z-20': layout === 'left',
               })}
             />
             {mediaEffects.hover && <div ref={gradientRef} />}

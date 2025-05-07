@@ -9,6 +9,7 @@ import { FormBlock } from '../../blocks/Form/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { TextWidthMedia } from '../../blocks/TextWidthMedia/config'
 import { UnicornStudioBlock } from '../../blocks/RenderUnicornStudio/config'
+import { MainBlock } from '../../blocks/MainBlockDeleteThisAfterProd/config'
 import { hero } from '@/heros/config'
 import { slugField } from '@/fields/slug'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -22,7 +23,7 @@ import {
   OverviewField,
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
-
+import { StackedBlock } from '@/blocks/StackedBlock/config'
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
   access: {
@@ -85,6 +86,8 @@ export const Pages: CollectionConfig<'pages'> = {
                 FormBlock,
                 TextWidthMedia,
                 UnicornStudioBlock,
+                StackedBlock,
+                MainBlock,
               ],
               required: true,
               admin: {

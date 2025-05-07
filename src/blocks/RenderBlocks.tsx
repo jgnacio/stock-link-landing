@@ -10,8 +10,11 @@ import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { TextWidthMedia } from './TextWidthMedia/Component'
 import UnicornScene from './RenderUnicornStudio/Component'
 import type { UnicornStudioConfig } from './RenderUnicornStudio/config'
+import StackedBlock from './StackedBlock/StackedBlock'
+import MainBlockComponent from './MainBlockDeleteThisAfterProd/Component'
+type BlockComponent = React.ComponentType<any>
 
-const blockComponents = {
+const blockComponents: Record<string, BlockComponent> = {
   archive: ArchiveBlock,
   content: ContentBlock,
   cta: CallToActionBlock,
@@ -19,12 +22,15 @@ const blockComponents = {
   mediaBlock: MediaBlock,
   textWidthMedia: TextWidthMedia,
   unicornStudio: UnicornScene,
+  stackedBlock: StackedBlock,
+  mainBlock: MainBlockComponent,
 }
 
 export const RenderBlocks: React.FC<{
   blocks: Page['layout'][0][]
 }> = (props) => {
   const { blocks } = props
+  console.log('RenderBlocks received blocks:', blocks)
 
   const hasBlocks = blocks && Array.isArray(blocks) && blocks.length > 0
 
@@ -33,9 +39,11 @@ export const RenderBlocks: React.FC<{
       <Fragment>
         {blocks.map((block, index) => {
           const { blockType } = block
+          console.log('Processing block:', { blockType, block })
 
           if (blockType && blockType in blockComponents) {
             const Block = blockComponents[blockType]
+            console.log('Found component for block:', blockType)
 
             if (Block) {
               if (blockType === 'unicornStudio') {
@@ -66,14 +74,21 @@ export const RenderBlocks: React.FC<{
                   </div>
                 )
               }
+              if (blockType === 'stackedBlock') {
+                return (
+                  <div key={index}>
+                    <Block block={block} disableInnerContainer />
+                  </div>
+                )
+              }
               return (
                 <div key={index}>
-                  {/* @ts-expect-error there may be some mismatch between the expected types here */}
                   <Block {...block} disableInnerContainer />
                 </div>
               )
             }
           }
+          console.log('No component found for block type:', blockType)
           return null
         })}
       </Fragment>

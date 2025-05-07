@@ -16,7 +16,7 @@ export default function Overview() {
         </div>
         <Link href="https://retailpro-app.vercel.app/">
           <Button className="bg-primary hover:bg-primary/90  px-8 py-6 text-lg rounded-full font-semibold transition-all duration-200 shadow-lg hover:scale-105">
-            Solicitar mi cuenta
+            Solicitar cuenta
           </Button>
         </Link>
       </div>

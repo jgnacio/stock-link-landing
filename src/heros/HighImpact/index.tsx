@@ -87,11 +87,7 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ links, media, richText 
             <div className="z-10 max-w-[35rem]">
               {richText && <RichText data={richText as DefaultTypedEditorState} />}
               <Link href="https://retailpro-app.vercel.app/">
-                <Button
-                  type="submit"
-                  variant={'default'}
-                  className="inline-flex items-center justify-center w-full px-5 py-5 text-sm font-semibold tracking-widest uppercase rounded sm:w-auto sm:py-3  mt-6"
-                >
+                <Button className="bg-primary hover:bg-primary/90  px-8 py-6 text-lg rounded-full font-semibold transition-all duration-200 shadow-lg hover:scale-105 mt-6">
                   Solicitá tu cuenta ahora
                 </Button>
               </Link>

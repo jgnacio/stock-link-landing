@@ -80,28 +80,33 @@ const QuoteDisplay: React.FC = () => {
   }, [])
 
   return (
-    <section className="w-full bg-white py-24 relative ">
-      <div
-        ref={containerRef}
-        className="max-w-6xl mx-auto px-6 flex flex-col items-center justify-center text-left relative z-20"
-      >
-        <div className="space-y-6 w-full">
-          <p ref={firstLineRef} className="text-6xl font-bold text-gray-900 leading-tight mb-4">
-            Digitalizar no es solo tener una tienda online.
-          </p>
-          <p ref={secondLineRef} className="text-xl text-gray-600 leading-relaxed">
-            Es tener un sistema que realmente te libera y te hace vender más.
-          </p>
+    <div className="w-full overflow-x-clip">
+      <section className="w-full bg-white py-12 md:py-24 relative">
+        <div
+          ref={containerRef}
+          className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col items-center justify-center text-left relative z-20"
+        >
+          <div className="space-y-4 md:space-y-6 w-full">
+            <p
+              ref={firstLineRef}
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-2 md:mb-4"
+            >
+              Digitalizar no es solo tener una tienda online.
+            </p>
+            <p ref={secondLineRef} className="text-lg sm:text-xl text-gray-600 leading-relaxed">
+              Es tener un sistema que realmente te libera y te hace vender más.
+            </p>
+          </div>
         </div>
-      </div>
-      <Image
-        src="https://res.cloudinary.com/dhq5ewbyu/image/upload/v1746635994/Bit-A/projects/Stock%20Link/viwtkvl1y0fnwtjqdpyl.png"
-        alt="Team illustration"
-        width={600}
-        height={800}
-        className="absolute -bottom-32 right-0 z-10 select-none pointer-events-none "
-      />
-    </section>
+        <Image
+          src="https://res.cloudinary.com/dhq5ewbyu/image/upload/v1746635994/Bit-A/projects/Stock%20Link/viwtkvl1y0fnwtjqdpyl.png"
+          alt="Team illustration"
+          width={600}
+          height={800}
+          className="hidden lg:block absolute -bottom-48 -right-32 z-10 select-none pointer-events-none"
+        />
+      </section>
+    </div>
   )
 }
 

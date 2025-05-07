@@ -84,9 +84,12 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ links, media, richText 
       <section className="relative py-16 sm:py-20 lg:py-24 xl:py-28 w-full h-full container">
         <div className="mx-auto relative h-full">
           <div className="grid items-center grid-cols-1 gap-y-12 lg:grid-cols-2 gap-x-16 h-full">
-            <div className="z-10 max-w-[35rem]">
+            <div className="z-10 max-w-[35rem] mx-auto lg:mx-0 text-center lg:text-left">
               {richText && <RichText data={richText as DefaultTypedEditorState} />}
-              <Link href="https://retailpro-app.vercel.app/">
+              <Link
+                href="https://retailpro-app.vercel.app/"
+                className="flex justify-center lg:justify-start"
+              >
                 <Button className="bg-primary hover:bg-primary/90  px-8 py-6 text-lg rounded-full font-semibold transition-all duration-200 shadow-lg hover:scale-105 mt-6">
                   Solicitá tu cuenta ahora
                 </Button>

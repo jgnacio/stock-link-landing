@@ -30,8 +30,6 @@ export const RenderBlocks: React.FC<{
   blocks: Page['layout'][0][]
 }> = (props) => {
   const { blocks } = props
-  console.log('RenderBlocks received blocks:', blocks)
-
   const hasBlocks = blocks && Array.isArray(blocks) && blocks.length > 0
 
   if (hasBlocks) {
@@ -39,11 +37,9 @@ export const RenderBlocks: React.FC<{
       <Fragment>
         {blocks.map((block, index) => {
           const { blockType } = block
-          console.log('Processing block:', { blockType, block })
 
           if (blockType && blockType in blockComponents) {
             const Block = blockComponents[blockType]
-            console.log('Found component for block:', blockType)
 
             if (Block) {
               if (blockType === 'unicornStudio') {
@@ -88,7 +84,6 @@ export const RenderBlocks: React.FC<{
               )
             }
           }
-          console.log('No component found for block type:', blockType)
           return null
         })}
       </Fragment>

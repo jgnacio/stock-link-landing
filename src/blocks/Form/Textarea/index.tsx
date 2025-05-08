@@ -18,7 +18,7 @@ export const Textarea: React.FC<
   return (
     <Width width={width}>
       <div className="space-y-2">
-        <Label htmlFor={name} className="text-sm font-medium text-gray-700">
+        <Label htmlFor={name} className="text-sm font-medium ">
           {label}
           {required && (
             <span className="text-red-500 ml-1">
@@ -30,7 +30,7 @@ export const Textarea: React.FC<
           defaultValue={defaultValue}
           id={name}
           rows={rows}
-          className="w-full bg-gray-50 border border-gray-200 min-h-[100px] transition-colors focus:border-primary focus:ring-1 focus:ring-primary resize-y"
+          className="w-full min-h-[100px] transition-colors focus:border-primary focus:ring-1 focus:ring-primary resize-y"
           {...register(name, { required: required })}
         />
         {errors[name] && <Error name={name} />}

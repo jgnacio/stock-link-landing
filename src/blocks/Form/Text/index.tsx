@@ -17,7 +17,7 @@ export const Text: React.FC<
   return (
     <Width width={width}>
       <div className="space-y-2">
-        <Label htmlFor={name} className="text-sm font-medium text-gray-700">
+        <Label htmlFor={name} className="text-sm font-medium ">
           {label}
           {required && (
             <span className="text-red-500 ml-1">
@@ -29,7 +29,7 @@ export const Text: React.FC<
           defaultValue={defaultValue}
           id={name}
           type="text"
-          className="w-full bg-gray-50 border border-gray-200 transition-colors focus:border-primary focus:ring-1 focus:ring-primary"
+          className="w-full  transition-colors focus:border-primary focus:ring-1 focus:ring-primary"
           {...register(name, { required })}
         />
         {errors[name] && <Error name={name} />}

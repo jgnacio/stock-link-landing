@@ -55,7 +55,7 @@ const CTAHurt: React.FC = () => {
   ]
 
   return (
-    <section className="w-full bg-zinc-950 py-24">
+    <section className="w-full bg-black py-24">
       <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center gap-16">
         {/* Columna izquierda: Mensaje principal */}
         <div ref={containerRef} className="flex-1 flex flex-col justify-center items-center">

@@ -17,7 +17,7 @@ export const Email: React.FC<
   return (
     <Width width={width}>
       <div className="space-y-2">
-        <Label htmlFor={name} className="text-sm font-medium text-gray-700">
+        <Label htmlFor={name} className="text-sm font-medium ">
           {label}
           {required && (
             <span className="text-red-500 ml-1">
@@ -30,7 +30,7 @@ export const Email: React.FC<
             defaultValue={defaultValue}
             id={name}
             type="email"
-            className="w-full bg-gray-50 border border-gray-200 pl-10 transition-colors focus:border-primary focus:ring-1 focus:ring-primary"
+            className="w-full  pl-10 transition-colors focus:border-primary focus:ring-1 focus:ring-primary"
             placeholder="ejemplo@correo.com"
             {...register(name, { pattern: /^\S[^\s@]*@\S+$/, required })}
           />

@@ -116,9 +116,9 @@ export const FormBlock: React.FC<
   return (
     <div className="container lg:max-w-[48rem] mx-auto">
       {enableIntro && introContent && !hasSubmitted && (
-        <RichText className="mb-8 lg:mb-12 text-black" data={introContent} enableGutter={false} />
+        <RichText className="mb-8 lg:mb-12 " data={introContent} enableGutter={false} />
       )}
-      <div className="p-6 lg:p-8 border border-border rounded-[1rem] bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">
+      <div className="p-6 lg:p-8 border border-border rounded-[1rem]  shadow-lg hover:shadow-xl transition-shadow duration-300">
         <FormProvider {...formMethods}>
           {!isLoading && hasSubmitted && confirmationType === 'message' && (
             <div className="text-center py-8">
@@ -169,7 +169,7 @@ export const FormBlock: React.FC<
                     if (Field) {
                       return (
                         <div
-                          className="transition-all duration-200 hover:bg-gray-50/50 p-4 rounded-lg border border-transparent hover:border-gray-200"
+                          className="transition-all duration-200 hover:bg-primary/10 p-4 rounded-lg border border-transparent hover:border-primary"
                           key={index}
                         >
                           <Field
